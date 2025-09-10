@@ -1,4 +1,6 @@
 ﻿using Analiser.Data;
+using Analiser.JsonConverters;
+using System.Text.Json;
 
 namespace Analiser
 {
@@ -8,10 +10,27 @@ namespace Analiser
 
         public bool Import(string filename)
         {
+            JsonSerializerOptions options = new JsonSerializerOptions()
+            {
+                AllowTrailingCommas = true,
+                IndentCharacter = '\t',
+                IndentSize = 1,
+                IgnoreReadOnlyFields = true,
+                IgnoreReadOnlyProperties = true,
+                WriteIndented = true,
+                Converters =
+                {
+                    new CodeExpressionJsonConverter(),
+                    new CodeMethodParameterJsonConverter(),
+                    new CodePropertyJsonConverter(),
+                    new CodeTypeJsonConverter()
+                }
+            };
+
             Projects.Clear();
 
             string json = File.ReadAllText(filename);
-            CodeProject[]? projectsFromJson = System.Text.Json.JsonSerializer.Deserialize<CodeProject[]>(json);
+            CodeProject[]? projectsFromJson = JsonSerializer.Deserialize<CodeProject[]>(json, options);
             if (projectsFromJson == null)
             {
                 return false;

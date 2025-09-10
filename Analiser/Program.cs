@@ -8,12 +8,12 @@ namespace Analiser
     internal class Program
     {
         private static bool _buildIho = false;
-        private static bool _importIho = false;
+        private static bool _importIho = true;
 
         private static bool _buildIsleOfMan = false;
         private static bool _importIsleOfMan = false;
 
-        private static bool _processChanges = true;
+        private static bool _processChanges = false;
 
         #region Main
 
@@ -37,7 +37,7 @@ namespace Analiser
                 if (_importIho)
                 {
                     DataImporter importer = new DataImporter();
-                    if (importer.Import("output-iho.json"))
+                    if (importer.Import("output-iho-short.json"))
                     {
                         PrintProjectOverview(importer.Projects);
                         DataExporter.Export(importer.Projects, "output-iho-compare.json"); // save the file again, so we can ensure that what was loaded was 100% correct

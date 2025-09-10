@@ -10,7 +10,7 @@
         public string Namespace { get; set; }
         public string Name { get; set; }
 
-        public string FullName => $"{Namespace}.{Name}";
+        public string FullName => Namespace == string.Empty ? Name : $"{Namespace}.{Name}";
 
         public bool IsDataTorque => Namespace.StartsWith("DataTorque.");
         public bool IsIho => Namespace.StartsWith("DataTorque.Iho");
@@ -55,6 +55,30 @@
         public void BuildHash()
         {
             _hash = HashCode.Combine(FullName);
+        }
+
+        internal static CodeType Parse(string value)
+        {
+            value = value.Trim();
+            if (value == string.Empty)
+            {
+                return Empty;
+            }
+
+            if (value == "void")
+            {
+                return Void;
+            }
+
+            string[] parts = value.Split('.');
+            if (parts.Length == 1)
+            {
+                return new CodeType(string.Empty, parts[0]);
+            }
+
+            string ns = string.Join(".", parts[..^1]);
+            string name = parts[^1];
+            return new CodeType(name, ns);
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using Analiser.Data;
+using Analiser.JsonConverters;
 using System.Text.Json;
 
 namespace Analiser
@@ -14,7 +15,14 @@ namespace Analiser
                 IndentSize = 1,
                 IgnoreReadOnlyFields = true,
                 IgnoreReadOnlyProperties = true,
-                WriteIndented = true
+                WriteIndented = true,
+                Converters =
+                {
+                    new CodeExpressionJsonConverter(),
+                    new CodeMethodParameterJsonConverter(),
+                    new CodePropertyJsonConverter(),
+                    new CodeTypeJsonConverter()
+                }
             };
 
             string json = JsonSerializer.Serialize(projects, options);
