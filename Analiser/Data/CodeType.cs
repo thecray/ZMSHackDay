@@ -78,7 +78,7 @@
 
             string ns = string.Join(".", parts[..^1]);
             string name = parts[^1];
-            return new CodeType(name, ns);
+            return new CodeType(ns, name);
         }
     }
 }

@@ -37,7 +37,7 @@ namespace Analiser
                 if (_importIho)
                 {
                     DataImporter importer = new DataImporter();
-                    if (importer.Import("output-iho-short.json"))
+                    if (importer.Import("output-iho-3_1_695_0.json"))
                     {
                         PrintProjectOverview(importer.Projects);
                         DataExporter.Export(importer.Projects, "output-iho-compare.json"); // save the file again, so we can ensure that what was loaded was 100% correct
