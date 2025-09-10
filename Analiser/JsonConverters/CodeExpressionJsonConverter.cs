@@ -47,7 +47,7 @@ namespace Analiser.JsonConverters
 
         public override void Write(Utf8JsonWriter writer, CodeExpression value, JsonSerializerOptions options)
         {
-            if (value == CodeExpression.Empty)
+            if (value.Equals(CodeExpression.Empty))
             {
                 writer.WriteStringValue(string.Empty);
                 return;

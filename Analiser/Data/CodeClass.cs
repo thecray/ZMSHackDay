@@ -2,6 +2,8 @@
 {
     public class CodeClass : IEquatable<CodeClass>
     {
+        public static CodeClass Empty => new CodeClass(string.Empty, string.Empty, null, []);
+
         private int _hash = 0;
 
         public string Namespace { get; set; } = string.Empty;

@@ -20,7 +20,10 @@ namespace Analiser
                 WriteIndented = true,
                 Converters =
                 {
+                    new CodeClassJsonConverter(),
                     new CodeExpressionJsonConverter(),
+                    new CodeMethodJsonConverter(),
+                    new CodeMethodBodyJsonConverter(),
                     new CodeMethodParameterJsonConverter(),
                     new CodePropertyJsonConverter(),
                     new CodeTypeJsonConverter()

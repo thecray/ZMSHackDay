@@ -8,6 +8,11 @@ namespace Analiser.JsonConverters
     {
         public override CodeType? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
         {
+            if (reader.TokenType == JsonTokenType.Null)
+            {
+                return null;
+            }
+
             if (reader.TokenType == JsonTokenType.StartObject)
             {
                 string codeTypeNameSpace = string.Empty;
@@ -48,7 +53,7 @@ namespace Analiser.JsonConverters
 
         public override void Write(Utf8JsonWriter writer, CodeType value, JsonSerializerOptions options)
         {
-            if (value == CodeType.Empty)
+            if (value.Equals(CodeType.Empty))
             {
                 writer.WriteStringValue(string.Empty);
                 return;

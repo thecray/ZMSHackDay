@@ -2,12 +2,15 @@
 {
     public class CodeMethodBody : IEquatable<CodeMethodBody>
     {
+        public static CodeMethodBody Empty = new CodeMethodBody();
+
         private int _hash = 0;
         public List<CodeType> ReferencedTypes { get; set; } = new List<CodeType>();
         public List<string> ReferencedStoredProcedures { get; set; } = new List<string>();
         public List<CodeExpression> ReferencedExpressions { get; set; } = new List<CodeExpression>();
 
         public string BodyText { get; set; } = string.Empty;
+        public string OriginalBodyText { get; set; } = string.Empty;
 
         public bool Equals(CodeMethodBody? other)
         {

@@ -157,6 +157,31 @@ namespace Analiser
             }
 
             clonedMethod = new CodeMethod(currentMethod.Modifiers, currentMethod.ReturnType, currentMethod.Name, currentMethod.Hash);
+
+            if (CloneWithChanges(currentMethod.Body, oldMethod.Body, out CodeMethodBody? clonedBody))
+            {
+                clonedMethod.Body = clonedBody!;
+            }
+
+            return true;
+        }
+
+        private bool CloneWithChanges(CodeMethodBody currentBody, CodeMethodBody oldBody, out CodeMethodBody? clonedBody)
+        {
+            if (currentBody.Equals(oldBody))
+            {
+                clonedBody = null;
+                return false;
+            }
+
+            clonedBody = new CodeMethodBody();
+            clonedBody.BodyText = currentBody.BodyText.Trim();
+            clonedBody.OriginalBodyText = oldBody.BodyText.Trim();
+
+            clonedBody.ReferencedTypes.AddRange(currentBody.ReferencedTypes);
+            clonedBody.ReferencedStoredProcedures.AddRange(currentBody.ReferencedStoredProcedures);
+            clonedBody.ReferencedExpressions.AddRange(currentBody.ReferencedExpressions);
+
             return true;
         }
     }

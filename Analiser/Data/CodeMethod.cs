@@ -2,6 +2,8 @@
 {
     public class CodeMethod : IEquatable<CodeMethod>
     {
+        public static CodeMethod Empty => new CodeMethod([], CodeType.Void, string.Empty, string.Empty);
+
         private int _hash = 0;
 
         public string[] Modifiers { get; set; }
