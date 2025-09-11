@@ -4,8 +4,8 @@
 # Compatible with Windows PowerShell 5.1 and PowerShell 7+
 $ErrorActionPreference = 'Stop'
 
-$FromVersion           = '3.1.776.0'
-$ToVersion             = '3.1.779.0'
+$FromVersion           = '3.1.695.0'
+$ToVersion             = '3.1.778.0'
 
 # =========================
 # CONFIG — EDIT THESE
