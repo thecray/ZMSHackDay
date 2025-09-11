@@ -116,7 +116,7 @@ namespace ZMSHackDay
                 foreach (WorkItem item in version.WorkItems)
                 {
                     builder.AppendLine($"* **{item.Title}**  ");
-                    builder.AppendLine(item.FunctionalNotes + "  ");
+                    builder.AppendLine(item.FunctionalNotes.Replace("\n", "  ").Trim() + "  ");
                     builder.AppendLine();
                 }
                 builder.AppendLine();
