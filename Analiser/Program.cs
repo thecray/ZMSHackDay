@@ -11,7 +11,7 @@ namespace Analiser
         private static bool _importIho = false;
 
         private static bool _buildIsleOfMan = false;
-        private static bool _importIsleOfMan = false;
+        private static bool _importIsleOfMan = true;
 
         private static bool _processChanges = true;
 
@@ -31,7 +31,7 @@ namespace Analiser
                 {
                     CodeTreeBuilder builder = BuildIho();
                     PrintProjectOverview(builder.Projects);
-                    DataExporter.Export(builder.Projects, "output-iho.json");
+                    DataExporter.Export(builder.Projects, "output-iho-3_1_776_0.json");
                 }
 
                 if (_importIho)
@@ -81,8 +81,8 @@ namespace Analiser
                 Console.WriteLine("= Changes =");
                 Console.WriteLine("===========");
 
-                Comparitorator comparitorator = new Comparitorator("output-iho-3_1_695_0.json", "output-iho-3_1_778_0.json");
-                comparitorator.Run("changes-iho-3_1_695_0__3_1_778_0.json");
+                Comparitorator comparitorator = new Comparitorator("output-iho-3_1_776_0.json", "output-iho-3_1_778_0.json");
+                comparitorator.Run("changes-iho-3_1_776_0__3_1_778_0.json");
                 PrintProjectOverview(comparitorator.Changes);
             }
         }

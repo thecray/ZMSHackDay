@@ -1,0 +1,23 @@
+﻿SELECT
+    [System.Id],
+    [System.WorkItemType],
+    [System.Title],
+    [DT.Developer],
+    [DT.Tester],
+    [System.AssignedTo],
+    [System.State],
+    [System.Tags],
+    [DT.ResolvedIn],
+    [DT.JiraID],
+    [dt.InternalImpact],
+    [dt.DeveloperNotes],
+    [dt.ExternalImpact],
+    [dt.FunctionalNotes]
+FROM workitems
+WHERE
+    [System.TeamProject] = @project
+    AND [System.WorkItemType] IN ('Task', 'bug')
+    AND (
+        [DT.ResolvedIn] > '3.1.695.0'
+        AND [DT.ResolvedIn] <= '3.1.776.0'
+    )
