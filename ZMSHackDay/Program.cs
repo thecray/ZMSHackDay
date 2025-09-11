@@ -4,7 +4,8 @@
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello, World!");
+            ReleaseNotesToMarkdown releaseNotesToMarkdown = new ReleaseNotesToMarkdown();
+            releaseNotesToMarkdown.Run("release-notes-3.1.776.0-3.1.779.0-with-version.json", "release-notes-3.1.776.0-3.1.779.0-ordered.json");
         }
     }
 }

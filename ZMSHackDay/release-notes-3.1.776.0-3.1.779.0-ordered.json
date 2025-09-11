@@ -1,0 +1,106 @@
+[
+	{
+		"Id": 269689,
+		"Version": "3.1.776.0",
+		"Title": "Multi Ad-hoc returns - Online - Deleted return is replaced with the same number",
+		"FunctionalNotes": "When multiple Ad Hoc returns have been filed on the same day they are assigned numbers sequentially starting at #1. When a filed return is deleted in the back office, the next filed return for that same Ad Hoc tax type will increase by 1, and will not re-purpose the deleted number.",
+		"DeveloperNotes": "Enhance tax return period calculations and handling\n\nCalculate the TaxPeriod only when needed (the period date is determined by a question in the tax return)\nUpdated CalculateTaxReturnPeriodAsync to include a yearID parameter and return a nullable integer, improving period calculation logic.\nModified FindPeriodByTaxpayerAndAdhocDate in TaxPeriodRepository.cs to accept yearID, enhancing filtering capabilities.\nAdjusted SQL stored procedure spf_FindPeriodByTaxpayerAndAdhocDate to incorporate the new @YearID parameter for year-based filtering.\nCheck @IsMultiAdhoc in spf_TaxReturnDeleteReturn.sql to control dummy tax return creation based on multi-adhoc status.\nUpdated test cases in TaxPeriodRepositoryTest.cs to align with the new changes.\nReflected changes in the ITaxPeriodRepository interface for consistency.\nImproved clarity and maintainability with additional comments.",
+		"VersionObject": {
+			"Major": 3,
+			"Minor": 1,
+			"Build": 776,
+			"Revision": 0
+		}
+	},
+	{
+		"Id": 270744,
+		"Version": "3.1.776.0",
+		"Title": "OBJ Case - Error with mandatory timespent field when changing Case Manager",
+		"FunctionalNotes": "Issue fixes that when time spent was mandatory, update Assigned manager cause error.",
+		"DeveloperNotes": "Remove time spent on task requirement when saving the case from the case tab, then re-instate it",
+		"VersionObject": {
+			"Major": 3,
+			"Minor": 1,
+			"Build": 776,
+			"Revision": 0
+		}
+	},
+	{
+		"Id": 213600,
+		"Version": "3.1.777.0",
+		"Title": "Goods Tax Return - Zero Rated GT missing \u00270\u0027 %",
+		"FunctionalNotes": "Issue fixes to ensure 0% is showing when 0 is entered in the rate field",
+		"DeveloperNotes": "Changed optional digit format character to zero pad format character.",
+		"VersionObject": {
+			"Major": 3,
+			"Minor": 1,
+			"Build": 777,
+			"Revision": 0
+		}
+	},
+	{
+		"Id": 218790,
+		"Version": "3.1.777.0",
+		"Title": "CDC Trigger Implementation",
+		"FunctionalNotes": "The RMS database has CDC enabled, which involves the addition of a new schema (14, cdc), a new filegroup, and a new file.  Consequences of the enabling of CDC are that two new jobs are added to SQL Server Agent per RMS database with CDC enabled (capture and cleanup), and a new user (cdc) is added to the database.  These jobs and the new user should be left untouched.\n\nWhere management of databases does not use the master spts provided by DT, or they are not kept up to date, consideration should be given as to what changes are necessary for CDC integrity to be retained.",
+		"DeveloperNotes": "Implementation of CDC\nWhat is it?\nAt this point it is the putting in place of the components needed to implement cdc tracking on tables.  It does not itself add cdc tracking.\nIt can be considered the equivalent of adding the BI database without adding BI processing.\nIt is invisible to the client, it does nothing.  Except where the client looks after the databases themselves.\n\nWhat does the update do?\nIt enables CDC on the RMS database, creates a new filegroup, creates a new file, adds the filegroup to the file.\nSQL Server does some changes to support this:\nIt adds a new schema, cdc (schema_id = 14).  (We must limit our queries of system tables to the dbo schema (schema_id = 1), we never bothered because we never had cause.  This update includes some amendments to that effect.)\nIt adds a new user, cdc.\nIt adds two new scheduled jobs, capture and cleanup, in the cdc schema.  These are executed by the cdc user.  Removing the cdc user causes the cleanup job to error.  Don\u0027t do that.\n\nIt adds new spt stored procedures:\nspt_EnableCDCForAnRMSDatabase - the procedure that enables cdc on the RMS database, creates a new filegroup, creates a new file, adds the filegroup to the file\nspt_SetCDCTrackingForATable - sets (or unsets) CDC tracking for a table, runs spt_CreateCDCTrigger and spt_EnableOrDisableRMSBITriggersForATable\nspt_SetCDCTrackingForAllTablesWithABITrigger - runs spt_SetCDCTrackingForATable for all tables with a BI trigger\nspt_CreateCDCTrigger - takes the BI trigger on the RMS table as a template, makes changes to make it suitable for the BI table, and applies it to the BI table\nspt_EnableOrDisableRMSBITriggersForATable - enables or disables the RMS BI trigger(s) on a table\n\nIt updates the RMS spt procedures that change the schema.\nspt_AddColumnToTable\nspt_AlterColumnOnTable\nspt_RemoveColumnFromTable\nspt_Rename_Column\nWhen called, these do additional things where the RMS table has cdc tracking enabled.  It disables then enables tracking.\n\nIt updates the RMS spt procedure that deletes and reseeds a table\nspt_DeleteAndReseed\nA table that has cdc tracking enabled cannot have TRUNCATE TABLE run against it.  This test is added to the existing test for a FK reference. \n\nIt updates all existing BI triggers to include new standard code that exits the trigger, doing nothing, if the table has cdc tracking enabled (except when integration tests are being run).  Note that the intent is that the RMS BI trigger would also be disabled when cdc tracking is enabled.\n\n**Any overrides of standard Iho triggers, and any new client-specific BI triggers should have that standard code added, as soon as possible.**",
+		"VersionObject": {
+			"Major": 3,
+			"Minor": 1,
+			"Build": 777,
+			"Revision": 0
+		}
+	},
+	{
+		"Id": 266103,
+		"Version": "3.1.777.0",
+		"Title": "BaseTestFixture AssertPropertyValues method doesn\u0027t handle nullable dates",
+		"FunctionalNotes": "no functional changes",
+		"DeveloperNotes": "Some test framework enhancements, purely technical change",
+		"VersionObject": {
+			"Major": 3,
+			"Minor": 1,
+			"Build": 777,
+			"Revision": 0
+		}
+	},
+	{
+		"Id": 270892,
+		"Version": "3.1.778.0",
+		"Title": "TestComplete Failed Runs Investigation and re-runs S30",
+		"FunctionalNotes": "TestComplete Failed Runs Investigation and re-runs S26",
+		"DeveloperNotes": "TestComplete Failed Runs Investigation and re-runs S26",
+		"VersionObject": {
+			"Major": 3,
+			"Minor": 1,
+			"Build": 778,
+			"Revision": 0
+		}
+	},
+	{
+		"Id": 271477,
+		"Version": "3.1.778.0",
+		"Title": "Configure kestrel for local web debugging",
+		"FunctionalNotes": "This PR simplifies local debugging of IhoWeb and IhoApi, which previously required enabling IIS and its related modules. By switching to Kestrel with a default ASPNET Core dev certificate, developers can now debug both applications without dealing with tedious IIS setup.",
+		"DeveloperNotes": "Description\nThis PR simplifies local debugging of IhoWeb and IhoApi, which previously required enabling IIS and its related modules. By switching to Kestrel with a default ASPNET Core dev certificate, developers can now debug both applications without dealing with tedious IIS setup.\n\nHow to use:\nUpdate IhoWeb and IhoApi to use their .exe startup targets.\n\nConfigure Multiple Startup Projects in the solution and set both IhoWeb and IhoApi to start together.\n\nTo set a startup project:\n\nRight-click on IhoWeb or IhoApi in Solution Explorer ? Set as Startup Project.\n\nOr, use the dropdown next to the Start Debugging button and select the desired project .exe.\n\nWith this setup, any developer can get started quickly\uFFFDno IIS configuration required. Happy debugging! ??\n\nNote: In production, Kestrel is typically not exposed directly to HTTPS traffic. Instead, it runs behind a reverse proxy (such as Nginx, Apache, or IIS) that handles SSL/TLS termination. This setup is intended solely for local development.\n\nimage.png",
+		"VersionObject": {
+			"Major": 3,
+			"Minor": 1,
+			"Build": 778,
+			"Revision": 0
+		}
+	},
+	{
+		"Id": 266477,
+		"Version": "3.1.779.0",
+		"Title": "Improve the authentication process",
+		"FunctionalNotes": "This change stops hackers from copying cookies using another browser to gain access to another web user and taxpayer\u0027s information by bypassing the login screen.",
+		"DeveloperNotes": "Enhance authentication with session IP/UA validation\n\nIntroduces ValidateSessionIpAndUA to improve user session security by validating the user\u0027s IP address and User-Agent.\nImplements SetSessionFingerprint in LoginController to store these values in the session.\nUpdates VerifySessionFilter to enforce checks during authorization.\nAdd unit tests to ensure the correctness of the new session validation logic.\n\nNote that this is off by default in clients (on in Product), to turn on IP/UA verification kindly enable the system constant\nEXEC spf_SystemConstant_set\n    @Name          = N\u0027ValidateSessionIpAndUA\u0027,\n    @ConstantValue = N\u0027True\u0027,\n    @CategoryCode  = N\u0027Web\u0027,\n    @TypeCode      = N\u0027Bool\u0027,\n    @Comments      = N\u0027If true, Web LoginController will set session IP and UA on user login and VerifySessionAttribute will validate them for each user request.\u0027,\n    @DTOnly        = 1;\nGO",
+		"VersionObject": {
+			"Major": 3,
+			"Minor": 1,
+			"Build": 779,
+			"Revision": 0
+		}
+	}
+]

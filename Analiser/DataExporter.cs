@@ -31,7 +31,7 @@ namespace Analiser
             string json = JsonSerializer.Serialize(projects, options);
             File.WriteAllText(filename, json);
 
-            Console.Write($"Output saved to '{filename}' ({json.Length} chars)");
+            Console.WriteLine($"Output saved to '{filename}' ({json.Length} chars)");
         }
     }
 }

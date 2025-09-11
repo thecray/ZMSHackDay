@@ -130,7 +130,7 @@ function CompareVersion($version1, $version2)
 
 function VersionToString($version)
 {
-    return ("{0}_{1}_{2}_{3}" -f $version.major, $version.minor, $version.build, $version.revision)
+    return ("{0}.{1}.{2}.{3}" -f $version.major, $version.minor, $version.build, $version.revision)
 }
 
 # =========================
@@ -162,7 +162,8 @@ try {
           $output += @{
               id = $result.id
               title = $result.fields."System.Title"
-              version = $version
+              version = VersionToString $version
+              versionObject = $version
               developerNotes = $result.fields."DT.DeveloperNotes"
               functionalNotes = $result.fields."DT.FunctionalNotes"
           }

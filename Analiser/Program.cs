@@ -7,8 +7,13 @@ namespace Analiser
 {
     internal class Program
     {
+        private static bool _isDemo = true;
+        private static string _demoIhoFromVersion = "3.1.695.0";
+        private static string _demoIhoToVersion = "3.1.778.0";
+        private static string _demoClient = "isleofman";
+
         private static bool _buildIho = false;
-        private static bool _importIho = false;
+        private static bool _importIho = true;
 
         private static bool _buildIsleOfMan = false;
         private static bool _importIsleOfMan = true;
@@ -19,7 +24,38 @@ namespace Analiser
 
         static void Main(string[] args)
         {
+            Console.Clear();
+            Console.ReadKey();
+            Console.Clear();
+
+            if (args.Length < 6)
+            {
+                Console.WriteLine();
+                Console.WriteLine("Usage: CodeAnalyser -from [version] -to [version] -client [client]");
+                Console.WriteLine();
+                return;
+            }
+
+            string fromVersion = args[1];
+            string toVersion = args[3];
+            string client = args[5];
+
+            Console.WriteLine();
+            Console.WriteLine($"Analysing code for iho versions '{fromVersion}' - '{toVersion}'");
+            Console.WriteLine($"Analysing code for current version of '{client}'");
+            Console.WriteLine();
+
             List<MetadataReference> references = new List<MetadataReference>();
+
+            if (_isDemo)
+            {
+                RunDemo();
+                return;
+            }
+
+
+
+
 
             if (_buildIho || _importIho)
             {
@@ -85,6 +121,54 @@ namespace Analiser
                 comparitorator.Run("changes-iho-3_1_776_0__3_1_778_0.json");
                 PrintProjectOverview(comparitorator.Changes);
             }
+
+        }
+
+        private static void RunDemo()
+        {
+            DataImporter importer = new DataImporter();
+
+            Console.WriteLine("===================================");
+            Console.WriteLine($"Analysing Iho From {_demoIhoFromVersion}");
+            Console.WriteLine("===================================");
+            importer.Import($"input-iho-{_demoIhoFromVersion.Replace(".", "_")}.json");
+            Thread.Sleep(1500);
+            PrintProjectOverview(importer.Projects);
+            Console.WriteLine();
+            Console.WriteLine();
+
+            Console.WriteLine("===================================");
+            Console.WriteLine($"Analysing Iho To {_demoIhoToVersion}");
+            Console.WriteLine("===================================");
+            importer.Import($"input-iho-{_demoIhoToVersion.Replace(".", "_")}.json");
+            Thread.Sleep(1500);
+            PrintProjectOverview(importer.Projects);
+            Console.WriteLine();
+            Console.WriteLine();
+
+            Console.WriteLine("===================================");
+            Console.WriteLine($"Analysing Client {_demoClient}");
+            Console.WriteLine("===================================");
+            importer.Import($"input-{_demoClient}-current.json");
+            Thread.Sleep(1000);
+            PrintProjectOverview(importer.Projects);
+            Console.WriteLine();
+            Console.WriteLine();
+
+            Console.WriteLine("===================================");
+            Console.WriteLine($"Analysing Changes");
+            Console.WriteLine("===================================");
+            Comparitorator comparitorator = new Comparitorator($"input-iho-{_demoIhoFromVersion.Replace(".", "_")}.json", $"input-iho-{_demoIhoToVersion.Replace(".", "_")}.json");
+            comparitorator.Run($"changes-iho-{_demoIhoFromVersion.Replace(".", "_")}-{_demoIhoToVersion.Replace(".", "_")}.json");
+            PrintChangesOverview(comparitorator.Changes);
+            Console.WriteLine();
+            Console.WriteLine();
+
+            Console.WriteLine("===========");
+            Console.WriteLine("Complete!");
+            Console.WriteLine("===========");
+
+            Console.ReadKey();
         }
 
         private static void PrintProjectOverview(IEnumerable<CodeProject> projects)
@@ -99,6 +183,20 @@ namespace Analiser
 
             int numMethods = allClasses.Sum(c => c.Methods.Count);
             Console.WriteLine($"Methods: {numMethods}");
+        }
+
+        private static void PrintChangesOverview(IEnumerable<CodeProject> projects)
+        {
+            Console.WriteLine($"Changed Projects: {projects.Count()}");
+
+            CodeClass[] allClasses = projects.SelectMany(p => p.Classes).ToArray();
+            Console.WriteLine($"Changed Classes: {allClasses.Length}");
+
+            int numProperties = allClasses.Sum(c => c.Properties.Count);
+            Console.WriteLine($"Changed Properties: {numProperties}");
+
+            int numMethods = allClasses.Sum(c => c.Methods.Count);
+            Console.WriteLine($"Changed Methods: {numMethods}");
         }
 
         #endregion
