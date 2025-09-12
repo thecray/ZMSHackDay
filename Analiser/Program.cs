@@ -12,43 +12,41 @@ namespace Analiser
         private static string _demoIhoToVersion = "3.1.778.0";
         private static string _demoClient = "isleofman";
 
-        private static bool _buildIho = false;
-        private static bool _importIho = true;
+        private static bool _buildIho = true;
+        private static bool _importIho = false;
 
         private static bool _buildIsleOfMan = false;
-        private static bool _importIsleOfMan = true;
+        private static bool _importIsleOfMan = false;
 
-        private static bool _processChanges = true;
+        private static bool _processChanges = false;
 
         #region Main
 
         static void Main(string[] args)
         {
             Console.Clear();
-            Console.ReadKey();
-            Console.Clear();
-
-            if (args.Length < 6)
-            {
-                Console.WriteLine();
-                Console.WriteLine("Usage: CodeAnalyser -from [version] -to [version] -client [client]");
-                Console.WriteLine();
-                return;
-            }
-
-            string fromVersion = args[1];
-            string toVersion = args[3];
-            string client = args[5];
-
-            Console.WriteLine();
-            Console.WriteLine($"Analysing code for iho versions '{fromVersion}' - '{toVersion}'");
-            Console.WriteLine($"Analysing code for current version of '{client}'");
-            Console.WriteLine();
 
             List<MetadataReference> references = new List<MetadataReference>();
 
             if (_isDemo)
             {
+                if (args.Length < 6)
+                {
+                    Console.WriteLine();
+                    Console.WriteLine("Usage: CodeAnalyser -from [version] -to [version] -client [client]");
+                    Console.WriteLine();
+                    return;
+                }
+
+                string fromVersion = args[1];
+                string toVersion = args[3];
+                string client = args[5];
+
+                Console.WriteLine();
+                Console.WriteLine($"Analysing code for iho versions '{fromVersion}' - '{toVersion}'");
+                Console.WriteLine($"Analysing code for current version of '{client}'");
+                Console.WriteLine();
+
                 RunDemo();
                 return;
             }
@@ -67,7 +65,7 @@ namespace Analiser
                 {
                     CodeTreeBuilder builder = BuildIho();
                     PrintProjectOverview(builder.Projects);
-                    DataExporter.Export(builder.Projects, "output-iho-3_1_776_0.json");
+                    DataExporter.Export(builder.Projects, "output-iho-3_1_778_0.json");
                 }
 
                 if (_importIho)
@@ -209,6 +207,7 @@ namespace Analiser
             Workspace workspace = CreateIhoWorkspace(references);
             CodeTreeBuilder codeTreeCreator = new CodeTreeBuilder(workspace, references);
             codeTreeCreator.ProcessProject("IhoBusinessObjects(net462)");
+            codeTreeCreator.ProcessProject("IhoUserInterface");
 
             return codeTreeCreator;
         }
@@ -219,6 +218,7 @@ namespace Analiser
             Workspace workspace = CreateIsleOfManWorkSpace(references);
             CodeTreeBuilder codeTreeCreator = new CodeTreeBuilder(workspace, references);
             codeTreeCreator.ProcessProject("IsleOfManBusinessObjects(net462)");
+            codeTreeCreator.ProcessProject("IsleOfManUserInterface");
 
             return codeTreeCreator;
         }
@@ -256,6 +256,7 @@ namespace Analiser
             // it's ideal to not load BusinessLayerFramework, since it means changes to base types don't just trigger changes to everything.
             AddIhoNugetReference(references, ihoVersion, "DataTorque.Iho.Interfaces.dll");
             AddIhoNugetReference(references, ihoVersion, "DataTorque.Iho.BusinessObjects.dll");
+            AddIhoNugetReference(references, ihoVersion, "DataTorque.Iho.UserInterface.dll");
 
             return workspace;
         }
