@@ -7,7 +7,7 @@ namespace Analiser
 {
     internal class Program
     {
-        private static bool _isDemo = true;
+        private static bool _isDemo = false;
         private static string _demoIhoFromVersion = "3.1.695.0";
         private static string _demoIhoToVersion = "3.1.778.0";
         private static string _demoClient = "isleofman";
@@ -18,7 +18,7 @@ namespace Analiser
         private static bool _buildIsleOfMan = false;
         private static bool _importIsleOfMan = false;
 
-        private static bool _processChanges = false;
+        private static bool _processChanges = true;
 
         #region Main
 
@@ -116,7 +116,7 @@ namespace Analiser
                 Console.WriteLine("===========");
 
                 Comparitorator comparitorator = new Comparitorator("output-iho-3_1_776_0.json", "output-iho-3_1_778_0.json");
-                comparitorator.Run("changes-iho-3_1_776_0__3_1_778_0.json");
+                comparitorator.Run("changes-iho-3_1_776_0__3_1_778_0_with_userinterface.json");
                 PrintProjectOverview(comparitorator.Changes);
             }
 

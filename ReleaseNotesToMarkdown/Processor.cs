@@ -3,7 +3,7 @@ using System.Text.Json;
 
 namespace ZMSHackDay
 {
-    public class ReleaseNotesToMarkdown
+    public class Processor
     {
         public class ReleaseNotesVersion
         {
@@ -73,7 +73,7 @@ namespace ZMSHackDay
             }
         }
 
-        public void Run(string inputFile, string outputFile, string outputMarkdownFile)
+        public void Run(string inputFile, string outputMarkdownFile)
         {
             JsonSerializerOptions options = new JsonSerializerOptions()
             {
@@ -92,16 +92,13 @@ namespace ZMSHackDay
             IEnumerable<string> versions = orderedItems.Select(i => i.Version).Distinct();
             foreach (var version in versions)
             {
-                var versionItem = new ReleaseNotesVersion();
+                ReleaseNotesVersion versionItem = new ReleaseNotesVersion();
                 versionItem.Version = version;
 
                 versionItem.WorkItems.AddRange(orderedItems.Where(i => i.Version == version));
 
                 outputVersions.Add(versionItem);
             }
-
-            string newJson = JsonSerializer.Serialize(outputVersions, options);
-            File.WriteAllText(outputFile, newJson);
 
             BuildMarkdown(outputVersions, outputMarkdownFile);
         }
