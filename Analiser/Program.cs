@@ -12,7 +12,7 @@ namespace Analiser
         private static string _demoIhoToVersion = "3.1.778.0";
         private static string _demoClient = "isleofman";
 
-        private static bool _buildIho = true;
+        private static bool _buildIho = false;
         private static bool _importIho = false;
 
         private static bool _buildIsleOfMan = false;
